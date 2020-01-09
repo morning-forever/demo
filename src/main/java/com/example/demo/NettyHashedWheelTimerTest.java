@@ -3,7 +3,12 @@ package com.example.demo;
 import io.netty.util.HashedWheelTimer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.time.LocalTime;
+import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -24,12 +29,54 @@ public class NettyHashedWheelTimerTest {
             System.out.println("***"+timeout);
         }, 5, TimeUnit.SECONDS);
 
+        System.out.println(System.nanoTime());
+        System.out.println(System.nanoTime());
         //阻塞main线程
         //System.in.read();
     }
 
-    @Test
+   @Test
+   /*
+    * @see
+    */
     public void assertTest(){
         assert  1==2;
+    }
+
+    @Test
+    public void systemNanoTimeTest(){
+       System.out.println(System.nanoTime());
+    }
+
+    @Test
+    public void scheduleExecutorService(){
+
+        System.out.println("start:"+new Date());
+
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
+
+        scheduledExecutorService.schedule(()->{
+            try {
+                Thread.sleep(5*1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(Thread.currentThread().getName()+"-running:"+new Date());
+        },5,TimeUnit.SECONDS);
+
+
+        scheduledExecutorService.schedule(()->{
+            try {
+                Thread.sleep(5*1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(Thread.currentThread().getName()+"-running:"+new Date());
+        },5,TimeUnit.SECONDS);
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
